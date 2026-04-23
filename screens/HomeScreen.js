@@ -13,25 +13,40 @@ import { Ionicons } from '@expo/vector-icons';
 
 import StoriesBar from '../components/StoriesBar';
 import PostCard from '../components/PostCard';
+import EventCard from '../components/EventCard';
 import SuggestedReels from '../components/SuggestedReels';
 import { STORIES, POSTS, SUGGESTED_REELS } from '../data/mockData';
+import { EVENTS } from '../data/drewtechData';
 
 export default function HomeScreen() {
   const insets = useSafeAreaInsets();
   
-  // Build feed items: stories first, then interleave reels after post 1
+  // Build feed items: stories first, then interleave events and reels
   const feedItems = [];
 
   POSTS.forEach((post, index) => {
     feedItems.push({ type: 'post', data: post, id: post.id });
+    
+    // Interlacing Events from Drewtech
+    if (index === 0 && EVENTS[0]) {
+      feedItems.push({ type: 'event', data: EVENTS[0], id: EVENTS[0].id });
+    }
+    
     if (index === 0) {
       feedItems.push({ type: 'reels', data: SUGGESTED_REELS, id: 'reels' });
+    }
+
+    if (index === 1 && EVENTS[1]) {
+      feedItems.push({ type: 'event', data: EVENTS[1], id: EVENTS[1].id });
     }
   });
 
   const renderItem = ({ item }) => {
     if (item.type === 'post') {
       return <PostCard post={item.data} />;
+    }
+    if (item.type === 'event') {
+      return <EventCard event={item.data} />;
     }
     if (item.type === 'reels') {
       return <SuggestedReels reels={item.data} />;
