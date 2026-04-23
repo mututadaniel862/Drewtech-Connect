@@ -1,8 +1,13 @@
 import React from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, Image } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
+import { AppEvent } from '../types';
 
-export default function EventCard({ event }) {
+interface EventCardProps {
+  event: AppEvent;
+}
+
+export default function EventCard({ event }: EventCardProps) {
   return (
     <View style={styles.card}>
       <View style={styles.header}>
@@ -10,9 +15,11 @@ export default function EventCard({ event }) {
           <Text style={styles.eventName}>{event.name}</Text>
           <Text style={styles.location}>{event.location}</Text>
         </View>
-        <TouchableOpacity style={styles.featureBadge}>
-          <Text style={styles.featureText}>FEATURED</Text>
-        </TouchableOpacity>
+        {event.featured && (
+          <TouchableOpacity style={styles.featureBadge}>
+            <Text style={styles.featureText}>FEATURED</Text>
+          </TouchableOpacity>
+        )}
       </View>
 
       <Image source={{ uri: event.poster }} style={styles.poster} />

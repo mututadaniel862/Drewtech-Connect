@@ -1,8 +1,13 @@
 import React from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, Image } from 'react-native';
-import { Ionicons } from '@expo/vector-icons';
+import { Creative } from '../types';
 
-export default function CreativeCard({ creative, onBook }) {
+interface CreativeCardProps {
+  creative: Creative;
+  onBook: () => void;
+}
+
+export default function CreativeCard({ creative, onBook }: CreativeCardProps) {
   return (
     <View style={styles.card}>
       <View style={styles.content}>
@@ -18,7 +23,7 @@ export default function CreativeCard({ creative, onBook }) {
       </View>
       
       <View style={styles.portfolioGrid}>
-        {creative.portfolio.map((item, index) => (
+        {creative.portfolio.map((item) => (
           <Image key={item.id} source={{ uri: item.url }} style={styles.portfolioImg} />
         ))}
       </View>

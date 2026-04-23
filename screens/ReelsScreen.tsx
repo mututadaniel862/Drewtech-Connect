@@ -1,12 +1,14 @@
+import React from 'react';
 import { View, Text, StyleSheet, Platform, StatusBar, FlatList, Image, TouchableOpacity } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { Ionicons } from '@expo/vector-icons';
 import { MEDIA_REELS } from '../data/drewtechData';
+import { MediaReel } from '../types';
 
 export default function ReelsScreen() {
   const insets = useSafeAreaInsets();
   
-  const renderMedia = ({ item }) => (
+  const renderMedia = ({ item }: { item: MediaReel }) => (
     <TouchableOpacity style={styles.mediaCard} activeOpacity={0.9}>
       <Image source={{ uri: item.thumbnail }} style={styles.thumb} />
       <View style={styles.overlay}>

@@ -7,7 +7,17 @@ import {
   StyleSheet,
 } from 'react-native';
 
-export default function SuggestedReels({ reels }) {
+interface Reel {
+  id: string;
+  color: string;
+  username?: string;
+}
+
+interface SuggestedReelsProps {
+  reels: Reel[];
+}
+
+export default function SuggestedReels({ reels }: SuggestedReelsProps) {
   return (
     <View style={styles.container}>
       <Text style={styles.label}>Suggested reels</Text>

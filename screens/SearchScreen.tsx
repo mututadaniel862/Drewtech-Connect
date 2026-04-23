@@ -1,22 +1,30 @@
+import React, { useState } from 'react';
 import { View, Text, StyleSheet, TextInput, Platform, StatusBar, ScrollView, FlatList, TouchableOpacity } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { Ionicons } from '@expo/vector-icons';
 import { CREATIVES, EVENTS } from '../data/drewtechData';
 import CreativeCard from '../components/CreativeCard';
 import EventCard from '../components/EventCard';
+import { Creative, AppEvent } from '../types';
 
 const CATEGORIES = ['All', 'Creatives', 'Events', 'Harare', 'Bulawayo', 'Gweru'];
 
+type DiscoveryItem = 
+  | { type: 'creative'; data: Creative; id: string }
+  | { type: 'event'; data: AppEvent; id: string };
+
 export default function SearchScreen() {
   const insets = useSafeAreaInsets();
-  const [activeCat, setActiveCat] = React.useState('All');
+  const [activeCat, setActiveCat] = useState('All');
   
-  const renderDiscoveryItem = ({ item }) => {
-    if (item.type === 'creative') return <CreativeCard creative={item.data} onBook={() => alert(`Booking ${item.data.name}`)} />;
+  const renderDiscoveryItem = ({ item }: { item: DiscoveryItem }) => {
+    if (item.type === 'creative') {
+        return <CreativeCard creative={item.data} onBook={() => alert(`Booking ${item.data.name}`)} />;
+    }
     return <EventCard event={item.data} />;
   };
 
-  const discoveryData = [];
+  const discoveryData: DiscoveryItem[] = [];
   CREATIVES.forEach(c => discoveryData.push({ id: c.id, type: 'creative', data: c }));
   EVENTS.forEach(e => discoveryData.push({ id: e.id, type: 'event', data: e }));
 

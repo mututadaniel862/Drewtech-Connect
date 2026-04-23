@@ -29,7 +29,7 @@ function NavigationStack() {
           paddingBottom: insets.bottom > 0 ? insets.bottom - 4 : 4,
         },
         tabBarIcon: ({ focused, color, size }) => {
-          let iconName;
+          let iconName: keyof typeof Ionicons.prototype.props.name | any;
           if (route.name === 'Home') {
             iconName = focused ? 'home' : 'home-outline';
           } else if (route.name === 'Search') {

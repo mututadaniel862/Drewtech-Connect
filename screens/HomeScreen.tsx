@@ -18,11 +18,16 @@ import SuggestedReels from '../components/SuggestedReels';
 import { STORIES, POSTS, SUGGESTED_REELS } from '../data/mockData';
 import { EVENTS } from '../data/drewtechData';
 
+type FeedItem = 
+  | { type: 'post'; data: any; id: string }
+  | { type: 'event'; data: any; id: string }
+  | { type: 'reels'; data: any; id: string };
+
 export default function HomeScreen() {
   const insets = useSafeAreaInsets();
   
   // Build feed items: stories first, then interleave events and reels
-  const feedItems = [];
+  const feedItems: FeedItem[] = [];
 
   POSTS.forEach((post, index) => {
     feedItems.push({ type: 'post', data: post, id: post.id });
@@ -41,7 +46,7 @@ export default function HomeScreen() {
     }
   });
 
-  const renderItem = ({ item }) => {
+  const renderItem = ({ item }: { item: FeedItem }) => {
     if (item.type === 'post') {
       return <PostCard post={item.data} />;
     }

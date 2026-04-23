@@ -8,12 +8,25 @@ import {
 } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 
-export default function StoriesBar({ stories }) {
-  const [seenIds, setSeenIds] = useState(
+interface Story {
+  id: string;
+  username: string;
+  initials: string;
+  color: string;
+  seen?: boolean;
+  isAdd?: boolean;
+}
+
+interface StoriesBarProps {
+  stories: Story[];
+}
+
+export default function StoriesBar({ stories }: StoriesBarProps) {
+  const [seenIds, setSeenIds] = useState<string[]>(
     stories.filter(s => s.seen).map(s => s.id)
   );
 
-  const markSeen = (id) => {
+  const markSeen = (id: string) => {
     if (!seenIds.includes(id)) {
       setSeenIds(prev => [...prev, id]);
     }

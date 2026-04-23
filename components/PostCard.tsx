@@ -11,7 +11,28 @@ import {
 import { Ionicons } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
 
-export default function PostCard({ post }) {
+interface PostProps {
+  post: {
+    id: string;
+    username: string;
+    location?: string | null;
+    initials: string;
+    avatarColor: string;
+    imageColor: string;
+    imageEmoji: string;
+    likes: number;
+    likesText?: string;
+    caption: string;
+    tags?: string;
+    comments: number;
+    time: string;
+    showFollow?: boolean;
+    liked: boolean;
+    saved: boolean;
+  };
+}
+
+export default function PostCard({ post }: PostProps) {
   const [liked, setLiked] = useState(post.liked);
   const [saved, setSaved] = useState(post.saved);
   const [likeCount, setLikeCount] = useState(post.likes || 0);
@@ -19,12 +40,11 @@ export default function PostCard({ post }) {
 
   const heartScale = useRef(new Animated.Value(0)).current;
   const heartOpacity = useRef(new Animated.Value(0)).current;
-  const lastTap = useRef(null);
+  const lastTap = useRef<number | null>(null);
 
   const handleDoubleTap = () => {
     const now = Date.now();
     if (lastTap.current && now - lastTap.current < 300) {
-      // double tap!
       if (!liked) {
         setLiked(true);
         setLikeCount(c => c + 1);
@@ -66,7 +86,6 @@ export default function PostCard({ post }) {
 
   return (
     <View style={styles.post}>
-      {/* Header */}
       <View style={styles.header}>
         <TouchableOpacity style={styles.userRow} activeOpacity={0.8}>
           <LinearGradient
@@ -100,14 +119,12 @@ export default function PostCard({ post }) {
         </View>
       </View>
 
-      {/* Image */}
       <TouchableWithoutFeedback onPress={handleDoubleTap}>
         <View style={styles.imageWrap}>
           <View style={[styles.imagePlaceholder, { backgroundColor: post.imageColor }]}>
             <Text style={styles.imageEmoji}>{post.imageEmoji}</Text>
             <Text style={styles.imageLabel}>{post.username}'s photo</Text>
           </View>
-          {/* Double tap heart overlay */}
           <Animated.View
             style={[
               styles.heartOverlay,
@@ -120,7 +137,6 @@ export default function PostCard({ post }) {
         </View>
       </TouchableWithoutFeedback>
 
-      {/* Actions */}
       <View style={styles.actions}>
         <TouchableOpacity onPress={toggleLike} activeOpacity={0.7}>
           <Ionicons
@@ -148,10 +164,8 @@ export default function PostCard({ post }) {
         </TouchableOpacity>
       </View>
 
-      {/* Likes */}
       <Text style={styles.likes}>{likesDisplay}</Text>
 
-      {/* Caption */}
       <View style={styles.captionRow}>
         <Text style={styles.caption}>
           <Text style={styles.captionUser}>{post.username} </Text>
@@ -159,22 +173,18 @@ export default function PostCard({ post }) {
         </Text>
       </View>
 
-      {/* Tags */}
       {!!post.tags && (
         <Text style={styles.tags}>{post.tags}</Text>
       )}
 
-      {/* Comments */}
       <TouchableOpacity activeOpacity={0.7}>
         <Text style={styles.comments}>
           View all {post.comments.toLocaleString()} comments
         </Text>
       </TouchableOpacity>
 
-      {/* Time */}
       <Text style={styles.time}>{post.time}</Text>
 
-      {/* Comment input */}
       <View style={styles.commentBar}>
         <View style={styles.commentAvatar}>
           <Text style={styles.commentAvatarText}>Y</Text>
