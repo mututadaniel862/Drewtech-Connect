@@ -7,9 +7,12 @@ import {
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { Ionicons } from '@expo/vector-icons';
 import { CREATIVES } from '../data/drewtechData';
+import { useNavigation } from '@react-navigation/native';
 
 export default function ProfileScreen() {
   const insets = useSafeAreaInsets();
+  const navigation = useNavigation<any>();
+  const [following, setFollowing] = React.useState(false);
   const creative = CREATIVES[0]; // Example: DJ Drew
   
   return (
@@ -31,7 +34,7 @@ export default function ProfileScreen() {
         <View style={styles.profileSection}>
           <Image source={{ uri: creative.avatar }} style={styles.avatarLarge} />
           <View style={styles.statsRow}>
-            {[['12', 'Posts'], ['1.2k', 'Followers'], ['340', 'Following']].map(([n, l]) => (
+            {[['12', 'Posts'], [following ? '1.2k' : '1.2k', 'Followers'], ['340', 'Following']].map(([n, l]) => (
               <View key={l} style={styles.stat}>
                 <Text style={styles.statNum}>{n}</Text>
                 <Text style={styles.statLabel}>{l}</Text>
@@ -50,11 +53,18 @@ export default function ProfileScreen() {
           <TouchableOpacity style={styles.bookBtn}>
             <Text style={styles.bookBtnText}>Book Now</Text>
           </TouchableOpacity>
-          <TouchableOpacity style={styles.subBtn}>
+          <TouchableOpacity style={styles.subBtn} onPress={() => navigation.navigate('Messages')}>
             <Text style={styles.subBtnText}>Message</Text>
           </TouchableOpacity>
-          <TouchableOpacity style={styles.subBtn}>
-            <Ionicons name="person-add-outline" size={18} color="#262626" />
+          <TouchableOpacity 
+            style={[styles.subBtn, following && styles.followingBtn]} 
+            onPress={() => setFollowing(!following)}
+          >
+            <Ionicons 
+              name={following ? "person-remove-outline" : "person-add-outline"} 
+              size={18} 
+              color={following ? "#262626" : "#262626"} 
+            />
           </TouchableOpacity>
         </View>
 
@@ -123,6 +133,9 @@ const styles = StyleSheet.create({
     paddingVertical: 8, alignItems: 'center', justifyContent: 'center',
   },
   subBtnText: { fontWeight: '600', fontSize: 13, color: '#262626' },
+  followingBtn: {
+    backgroundColor: '#dbdbdb',
+  },
   tabs: {
     flexDirection: 'row', borderTopWidth: 0.5, borderTopColor: '#dbdbdb',
   },

@@ -10,6 +10,7 @@ import {
 } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { Ionicons } from '@expo/vector-icons';
+import { useNavigation } from '@react-navigation/native';
 
 import StoriesBar from '../components/StoriesBar';
 import PostCard from '../components/PostCard';
@@ -25,6 +26,7 @@ type FeedItem =
 
 export default function HomeScreen() {
   const insets = useSafeAreaInsets();
+  const navigation = useNavigation<any>();
   
   // Build feed items: stories first, then interleave events and reels
   const feedItems: FeedItem[] = [];
@@ -78,7 +80,7 @@ export default function HomeScreen() {
             <Ionicons name="heart-outline" size={26} color="#262626" />
             <View style={styles.notifDot} />
           </TouchableOpacity>
-          <TouchableOpacity activeOpacity={0.7}>
+          <TouchableOpacity activeOpacity={0.7} onPress={() => navigation.navigate('Messages')}>
             <Ionicons name="chatbubble-outline" size={26} color="#262626" />
           </TouchableOpacity>
         </View>

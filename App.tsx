@@ -5,15 +5,18 @@ import { Ionicons } from '@expo/vector-icons';
 import { StatusBar } from 'expo-status-bar';
 import { SafeAreaProvider, useSafeAreaInsets } from 'react-native-safe-area-context';
 
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import HomeScreen from './screens/HomeScreen';
 import SearchScreen from './screens/SearchScreen';
 import ReelsScreen from './screens/ReelsScreen';
 import ProfileScreen from './screens/ProfileScreen';
 import AdminScreen from './screens/AdminScreen';
+import MessagesScreen from './screens/MessagesScreen';
 
 const Tab = createBottomTabNavigator();
+const Stack = createNativeStackNavigator();
 
-function NavigationStack() {
+function TabNavigator() {
   const insets = useSafeAreaInsets();
 
   return (
@@ -29,7 +32,7 @@ function NavigationStack() {
           paddingBottom: insets.bottom > 0 ? insets.bottom - 4 : 4,
         },
         tabBarIcon: ({ focused, color, size }) => {
-          let iconName: keyof typeof Ionicons.prototype.props.name | any;
+          let iconName: any;
           if (route.name === 'Home') {
             iconName = focused ? 'home' : 'home-outline';
           } else if (route.name === 'Search') {
@@ -61,7 +64,10 @@ export default function App() {
     <SafeAreaProvider>
       <NavigationContainer>
         <StatusBar style="dark" />
-        <NavigationStack />
+        <Stack.Navigator screenOptions={{ headerShown: false }}>
+          <Stack.Screen name="Main" component={TabNavigator} />
+          <Stack.Screen name="Messages" component={MessagesScreen} options={{ animation: 'slide_from_right' }} />
+        </Stack.Navigator>
       </NavigationContainer>
     </SafeAreaProvider>
   );

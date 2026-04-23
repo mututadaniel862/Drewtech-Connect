@@ -35,6 +35,7 @@ interface PostProps {
 export default function PostCard({ post }: PostProps) {
   const [liked, setLiked] = useState(post.liked);
   const [saved, setSaved] = useState(post.saved);
+  const [following, setFollowing] = useState(false);
   const [likeCount, setLikeCount] = useState(post.likes || 0);
   const [comment, setComment] = useState('');
 
@@ -109,8 +110,14 @@ export default function PostCard({ post }: PostProps) {
         </TouchableOpacity>
         <View style={styles.headerRight}>
           {post.showFollow && (
-            <TouchableOpacity style={styles.followBtn} activeOpacity={0.8}>
-              <Text style={styles.followText}>Follow</Text>
+            <TouchableOpacity 
+              style={[styles.followBtn, following && styles.followingBtn]} 
+              activeOpacity={0.8}
+              onPress={() => setFollowing(!following)}
+            >
+              <Text style={[styles.followText, following && styles.followingText]}>
+                {following ? 'Following' : 'Follow'}
+              </Text>
             </TouchableOpacity>
           )}
           <TouchableOpacity>
@@ -278,6 +285,12 @@ const styles = StyleSheet.create({
     color: '#fff',
     fontWeight: '600',
     fontSize: 12,
+  },
+  followingBtn: {
+    backgroundColor: '#efefef',
+  },
+  followingText: {
+    color: '#262626',
   },
   more: {
     fontSize: 18,
