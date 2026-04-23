@@ -1,0 +1,16 @@
+{
+  "expo": {
+    "name": "Drewtech Connect",
+    "slug": "drewtech-connect",
+    "version": "1.0.0",
+    "sdkVersion": "54.0.0",
+    "orientation": "portrait",
+    "userInterfaceStyle": "light",
+    "assetBundlePatterns": [
+      "**/*"
+    ],
+    "ios": {
+      "supportsTablet": true
+    }
+  }
+}
