@@ -7,9 +7,12 @@ import {
   StyleSheet,
   Animated,
   TextInput,
+  Linking,
+  Alert,
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
+import { useNavigation } from '@react-navigation/native';
 
 interface PostProps {
   post: {
@@ -33,6 +36,7 @@ interface PostProps {
 }
 
 export default function PostCard({ post }: PostProps) {
+  const navigation = useNavigation<any>();
   const [liked, setLiked] = useState(post.liked);
   const [saved, setSaved] = useState(post.saved);
   const [following, setFollowing] = useState(false);
@@ -81,6 +85,28 @@ export default function PostCard({ post }: PostProps) {
     }
   };
 
+  const shareToWhatsApp = () => {
+    const url = `whatsapp://send?text=Check out this post from ${post.username} on Drewtech Connect!`;
+    Linking.canOpenURL(url).then(supported => {
+      if (supported) {
+        Linking.openURL(url);
+      } else {
+        Alert.alert('Error', 'WhatsApp is not installed on this device.');
+      }
+    });
+  };
+
+  const handleShare = () => {
+    Alert.alert('Shared!', `Post by ${post.username} shared with your friends.`);
+  };
+
+  const postComment = () => {
+    if (comment.trim()) {
+      Alert.alert('Success', 'Comment posted!');
+      setComment('');
+    }
+  };
+
   const likesDisplay = post.likesText
     ? post.likesText
     : `${likeCount.toLocaleString()} likes`;
@@ -88,7 +114,11 @@ export default function PostCard({ post }: PostProps) {
   return (
     <View style={styles.post}>
       <View style={styles.header}>
-        <TouchableOpacity style={styles.userRow} activeOpacity={0.8}>
+        <TouchableOpacity 
+          style={styles.userRow} 
+          activeOpacity={0.8}
+          onPress={() => navigation.navigate('Profile')}
+        >
           <LinearGradient
             colors={['#f09433', '#e6683c', '#dc2743', '#cc2366', '#bc1888']}
             style={styles.avatarRing}
@@ -120,7 +150,7 @@ export default function PostCard({ post }: PostProps) {
               </Text>
             </TouchableOpacity>
           )}
-          <TouchableOpacity>
+          <TouchableOpacity onPress={() => Alert.alert('Options', 'More options coming soon!')}>
             <Text style={styles.more}>···</Text>
           </TouchableOpacity>
         </View>
@@ -155,18 +185,18 @@ export default function PostCard({ post }: PostProps) {
         <TouchableOpacity activeOpacity={0.7}>
           <Ionicons name="chatbubble-outline" size={24} color="#262626" />
         </TouchableOpacity>
-        <TouchableOpacity activeOpacity={0.7}>
+        <TouchableOpacity activeOpacity={0.7} onPress={handleShare}>
           <Ionicons name="paper-plane-outline" size={24} color="#262626" />
         </TouchableOpacity>
-        <TouchableOpacity activeOpacity={0.7}>
-          <Ionicons name="logo-whatsapp" size={24} color="#262626" />
+        <TouchableOpacity activeOpacity={0.7} onPress={shareToWhatsApp}>
+          <Ionicons name="logo-whatsapp" size={24} color="#25D366" />
         </TouchableOpacity>
         <View style={{ flex: 1 }} />
         <TouchableOpacity onPress={() => setSaved(s => !s)} activeOpacity={0.7}>
           <Ionicons
             name={saved ? 'bookmark' : 'bookmark-outline'}
             size={24}
-            color="#262626"
+            color={saved ? '#000' : '#262626'}
           />
         </TouchableOpacity>
       </View>
@@ -206,7 +236,7 @@ export default function PostCard({ post }: PostProps) {
           onSubmitEditing={() => setComment('')}
         />
         {comment.length > 0 && (
-          <TouchableOpacity onPress={() => setComment('')}>
+          <TouchableOpacity onPress={postComment}>
             <Text style={styles.postBtn}>Post</Text>
           </TouchableOpacity>
         )}
